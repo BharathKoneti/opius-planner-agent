@@ -1,20 +1,20 @@
 """
-TaskAnalyzer - Universal task categorization and analysis system.
+Task Analyzer - Intelligent task categorization and analysis.
 
-This module provides intelligent task analysis capabilities including:
-- Domain categorization (Creative, Technical, Business, Personal, Educational)
+This module provides sophisticated task analysis capabilities including:
+- Task categorization (Creative, Technical, Business, Personal, Educational)
 - Complexity assessment (Low, Medium, High, Very High)
-- Duration estimation
-- Skill requirement identification
-- Dependency analysis
+- Duration estimation based on complexity
+- Required skills identification
+- Success criteria generation
 """
 
+import hashlib
 import re
 from enum import Enum, IntEnum
 from typing import Dict, List, Optional, Set, Any
 from dataclasses import dataclass
 from functools import lru_cache
-import hashlib
 
 
 class TaskCategory(Enum):
@@ -179,7 +179,11 @@ class TaskAnalyzer:
         complexity_scores = {}
         
         for complexity, patterns in self.complexity_levels.items():
-            score = sum(1 for pattern in patterns if pattern in task_lower)
+            score = 0
+            for pattern in patterns:
+                # Use word boundary matching to prevent substring issues
+                if re.search(r'\b' + re.escape(pattern) + r'\b', task_lower):
+                    score += 1
             if score > 0:
                 complexity_scores[complexity] = score
         
@@ -252,7 +256,12 @@ class TaskAnalyzer:
         category_scores = {}
         
         for category, patterns in self.categories.items():
-            score = sum(1 for pattern in patterns if pattern in task_lower)
+            score = 0
+            for pattern in patterns:
+                # Use word boundary matching to prevent substring issues
+                # \b ensures we match whole words only
+                if re.search(r'\b' + re.escape(pattern) + r'\b', task_lower):
+                    score += 1
             if score > 0:
                 category_scores[category] = score
         
@@ -263,7 +272,11 @@ class TaskAnalyzer:
         complexity_scores = {}
         
         for complexity, patterns in self.complexity_levels.items():
-            score = sum(1 for pattern in patterns if pattern in task_lower)
+            score = 0
+            for pattern in patterns:
+                # Use word boundary matching to prevent substring issues
+                if re.search(r'\b' + re.escape(pattern) + r'\b', task_lower):
+                    score += 1
             if score > 0:
                 complexity_scores[complexity] = score
         
