@@ -43,11 +43,10 @@ class SoftwareDevelopmentTemplate(Template):
     
     def _generate_software_template(self) -> str:
         """Generate software development template content with tracker functionality."""
-        tech_stack_list = "\n".join([f"- {tech}" for tech in self.tech_stack])
         
         return f"""# {{{{ project_name | default("Software Development Project") }}}}
 
-**Project Type**: {self.project_type.replace('_', ' ').title()}
+**Project Type**: {{{{ project_type | default("{self.project_type.replace('_', ' ').title()}") }}}}
 **Description**: {{{{ description | default("A software development project") }}}}
 **Target Users**: {{{{ target_users | default("General users") }}}}
 
@@ -74,11 +73,6 @@ class SoftwareDevelopmentTemplate(Template):
 - Secure authentication
 - API integration
 {{% endif %}}
-
-## 🔧 Technology Stack
-
-{tech_stack_list}
-**Deployment Target**: {{{{ deployment_target | default("Cloud provider") }}}}
 
 ## 📊 Project Tracker
 
@@ -203,19 +197,37 @@ class SoftwareDevelopmentTemplate(Template):
 - Maintenance procedures
 
 ## 🔄 Daily Progress Updates
-**Instructions for LLM**: Update this section daily with progress, blockers, and achievements.
+**Instructions for LLM**: Update this section daily with progress, blockers, and achievements. Always reference your analysis document and work log.
 
-### {{{{ current_date | default("2025-06-12") }}}}
-- Completed: Environment setup, project structure
-- In Progress: User authentication system
-- Blockers: None
-- Next Steps: Database schema design
+### {{{{ current_date | default("2025-12-15") }}}}
+- **Analysis Document**: [Project Analysis](./.project-scaffolding/project_analysis.md) - Document current project understanding
+- **Work Log**: [Work Log](./.project-scaffolding/work_log.md) - [Session summary and next steps]
+- **Completed**: Environment setup, project structure
+- **In Progress**: User authentication system (refer to analysis for approach)
+- **Blockers**: None (check work log for previous issues)
+- **Next Steps**: Database schema design (detailed in work log)
+- **Lessons Learned**: [Document any insights for future reference]
 
-### {{{{ current_date | default("2025-06-11") }}}}
-- Completed: Project kickoff, requirements gathering
-- In Progress: Environment setup
-- Blockers: None
-- Next Steps: Begin core development
+### {{{{ current_date | default("2025-12-14") }}}}
+- **Analysis Document**: [Project Analysis](./.project-scaffolding/project_analysis.md) - Initial project analysis created
+- **Work Log**: [Work Log](./.project-scaffolding/work_log.md) - [Day 1 setup and planning]
+- **Completed**: Project kickoff, requirements gathering
+- **In Progress**: Environment setup
+- **Blockers**: None
+- **Next Steps**: Begin core development (priorities documented in work log)
+- **Lessons Learned**: Always create analysis document before coding
+
+**Template for New Entries**:
+```markdown
+### [Date]
+- **Analysis Document**: [Project Analysis](./.project-scaffolding/project_analysis.md) - [What was updated in analysis]
+- **Work Log**: [Work Log](./.project-scaffolding/work_log.md) - [Session summary]
+- **Completed**: [Specific tasks finished with details]
+- **In Progress**: [Current work with reference to analysis approach]
+- **Blockers**: [Issues with links to work log for solutions attempted]
+- **Next Steps**: [Priorities based on analysis and work log planning]
+- **Lessons Learned**: [Key insights for future sessions]
+```
 
 ## 🛠️ Tools & Resources
 - Version control: Git/GitHub

@@ -49,6 +49,95 @@ class UIUXDesignTemplate(Template):
 **Platform**: {{{{ platform | default("{self.platform}") }}}}
 **Target Users**: {{{{ target_users | default("General users") }}}}
 
+## 🤖 **LLM Memory Management Instructions**
+
+**CRITICAL**: Before starting any design work, create and maintain these documents for persistent memory:
+
+#### **1. 📊 Design Analysis Document (`design_analysis.md`)**
+Create a comprehensive design analysis document and link it here: `[Design Analysis](./design_analysis.md)`
+
+**Document Structure**:
+```markdown
+# Design Analysis - {{{{ project_name | default("UI/UX Design Project") }}}}
+
+## 🎯 Design Vision
+- **Design Goals**: [What the design should achieve]
+- **User Needs**: [What users want to accomplish]
+- **Design Principles**: [Guiding design decisions]
+- **Success Metrics**: [How to measure design success]
+
+## 👥 User Analysis
+- **User Personas**: [Detailed user profiles and behaviors]
+- **User Journey**: [Complete user flow and pain points]
+- **Use Cases**: [Specific scenarios and interactions]
+- **Accessibility Needs**: [Requirements for inclusive design]
+
+## 🎨 Design Strategy
+- **Visual Style**: [Color, typography, layout decisions]
+- **Interaction Design**: [How users interact with interface]
+- **Information Architecture**: [Content organization and navigation]
+- **Design System**: [Reusable components and patterns]
+
+## 🔄 Ongoing Design Updates
+[Keep updating as you iterate on the design]
+```
+
+#### **2. 📝 Design Work Log (`design_work_log.md`)**
+Create a detailed design work log and link it here: `[Design Work Log](./design_work_log.md)`
+
+**Work Log Structure**:
+```markdown
+# Design Work Log - {{{{ project_name | default("UI/UX Design Project") }}}}
+
+## 📊 Quick Reference
+- **Project Start**: [Date]
+- **Current Phase**: [Research/Wireframing/Design/Testing]
+- **Design Progress**: [Current completion status]
+- **Last Design Session**: [What was accomplished]
+- **Design Challenges**: [Current design problems or blocks]
+
+## 📅 Daily Design Sessions
+
+### [Date] - [Session Description]
+**Time Spent**: [Duration]
+**Phase**: [Current design phase]
+**Designs Created/Modified**:
+- [Specific screens/components worked on]
+
+**Design Discoveries**:
+- [User insights discovered]
+- [Design solutions that worked]
+- [Interface improvements found]
+
+**Design Challenges**:
+- [Usability issues encountered]: [How addressed]
+- [Design problems]: [Solutions attempted]
+
+**User Feedback**:
+- [Testing insights received]
+- [Stakeholder feedback incorporated]
+
+**Next Session Plan**:
+- [Specific designs to create/modify]
+- [User testing to conduct]
+- [Design problems to solve]
+
+## 🚫 Design Mistakes Archive
+**Purpose**: Prevent repeating design mistakes
+
+### [Mistake Category]
+- **Issue**: [What design didn't work]
+- **Why It Failed**: [Usability or business reason]
+- **Better Approach**: [Improved design solution]
+- **Prevention**: [How to avoid in future designs]
+```
+
+**Instructions for Design Work**:
+- **Start of each session**: Review analysis and previous session notes
+- **Before major design decisions**: Check analysis for user needs alignment
+- **After user testing**: Document insights in both files
+- **When stuck on design problems**: Review work log for patterns and solutions
+
 ## 🎨 Design Overview
 
 **Project Goals**: {{{{ project_goals | default("Create intuitive user experience") }}}}
@@ -67,57 +156,62 @@ class UIUXDesignTemplate(Template):
 ## 🚀 Design Process
 
 ### Phase 1: Research & Discovery (1-2 weeks)
+- [ ] **Create Analysis Document**: Set up design_analysis.md with user research and strategy
+- [ ] **Create Work Log**: Set up design_work_log.md for session tracking
 - [ ] **User Research**
-  Conduct user interviews and surveys
-  
+  Conduct user interviews and surveys (document insights in analysis)
 - [ ] **Competitive Analysis**
   Research existing solutions and best practices
-  
 - [ ] **User Personas**
-  Create detailed user personas and scenarios
-  
+  Create detailed user personas and scenarios (update analysis)
 - [ ] **User Journey Mapping**
   Map user flows and identify pain points
 
 ### Phase 2: Information Architecture (3-5 days)
+- [ ] **Update Analysis**: Refine understanding based on research
 - [ ] **Site Map Creation**
-  Define content structure and navigation
-  
+  Define content structure and navigation (reference analysis for user needs)
 - [ ] **User Flow Design**
   Design optimal user pathways
-  
 - [ ] **Content Strategy**
   Plan content hierarchy and messaging
 
 ### Phase 3: Wireframing & Prototyping (1-2 weeks)
+- [ ] **Daily Work Log Updates**: Track design progress and discoveries
 - [ ] **Low-Fidelity Wireframes**
-  Create basic layout structures
-  
+  Create basic layout structures (log design decisions)
 - [ ] **Interactive Prototypes**
   Build clickable prototypes for testing
-  
 - [ ] **Usability Testing**
-  Test prototypes with real users
+  Test prototypes with real users (document feedback in work log)
 
 ### Phase 4: Visual Design (2-3 weeks)
+- [ ] **Reference Analysis & Work Log**: Check for design consistency with user needs
 - [ ] **Design System Creation**
-  Establish colors, typography, components
-  
+  Establish colors, typography, components (update analysis with rationale)
 - [ ] **High-Fidelity Mockups**
-  Create detailed visual designs
-  
+  Create detailed visual designs (document design solutions)
 - [ ] **Design Specifications**
   Document spacing, colors, and interactions
 
 ### Phase 5: Implementation Support (1 week)
+- [ ] **Update Design Documentation**: Ensure analysis and work log are complete
 - [ ] **Developer Handoff**
   Provide detailed design specifications
-  
 - [ ] **Design QA**
   Review implementation for design accuracy
-  
 - [ ] **Final Adjustments**
   Make necessary design refinements
+
+## 🔄 Design Progress Tracking
+**Instructions**: Update daily with design discoveries and iterations
+
+### {{{{ current_date | default("2025-12-15") }}}}
+- **Design Analysis**: [Design Analysis](./design_analysis.md) - [Document current design understanding]
+- **Work Log**: [Design Work Log](./design_work_log.md) - [Session summary and design discoveries]
+- **Designs Completed**: [Screens/components finished]
+- **User Insights**: [Key usability discoveries or user feedback]
+- **Next Session**: [Specific design goals for next session]
 
 ## 📊 Success Criteria
 - [ ] User research insights incorporated into design
@@ -126,6 +220,7 @@ class UIUXDesignTemplate(Template):
 - [ ] Usability testing conducted with positive results
 - [ ] Design system documented and delivered
 - [ ] Developer handoff completed successfully
+- [ ] Design analysis documents show clear user-centered decisions
 
 ## 📚 Deliverables
 - User research findings

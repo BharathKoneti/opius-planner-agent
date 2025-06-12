@@ -51,6 +51,91 @@ class StoryWritingTemplate(Template):
 **Target Audience**: {{{{ target_audience | default("General") }}}}
 **Estimated Word Count**: {{{{ word_count | default("{self.estimated_word_count}") }}}}
 
+## 🤖 **LLM Memory Management Instructions**
+
+**CRITICAL**: Before starting any creative work, create and maintain these documents for persistent memory:
+
+#### **1. 📊 Creative Analysis Document (`creative_analysis.md`)**
+Create a comprehensive analysis document and link it here: `[Creative Analysis](./creative_analysis.md)`
+
+**Document Structure**:
+```markdown
+# Creative Analysis - {{{{ story_title | default("Story Writing Project") }}}}
+
+## 🎯 Creative Vision
+- **Core Theme**: [Central message or idea]
+- **Genre Conventions**: [What readers expect from this genre]
+- **Target Audience**: [Who will read this and what they want]
+- **Unique Angle**: [What makes this story different]
+
+## 📝 Story Analysis
+- **Character Development**: [Main character arcs and growth]
+- **Plot Structure**: [Beginning, middle, end analysis]
+- **Conflict Analysis**: [Internal and external conflicts]
+- **Setting Details**: [World-building and atmosphere]
+
+## 🔍 Creative Strategy
+- **Writing Style**: [Voice, tone, pacing decisions]
+- **Research Needs**: [Background information required]
+- **Creative Challenges**: [Difficult scenes or concepts]
+- **Quality Standards**: [What makes this story successful]
+
+## 🔄 Ongoing Creative Updates
+[Keep updating as you develop the story]
+```
+
+#### **2. 📝 Creative Work Log (`creative_work_log.md`)**
+Create a detailed creative work log and link it here: `[Creative Work Log](./creative_work_log.md)`
+
+**Work Log Structure**:
+```markdown
+# Creative Work Log - {{{{ story_title | default("Story Writing Project") }}}}
+
+## 📊 Quick Reference
+- **Project Start**: [Date]
+- **Current Phase**: [Brainstorming/Writing/Editing]
+- **Word Count Progress**: [Current/Target words]
+- **Last Creative Session**: [What was accomplished]
+- **Creative Challenges**: [Current creative blocks or issues]
+
+## 📅 Daily Creative Sessions
+
+### [Date] - [Session Description]
+**Time Spent**: [Duration]
+**Phase**: [Current creative phase]
+**Words Written**: [New words added]
+**Scenes/Chapters Completed**:
+- [Specific scene/chapter with brief description]
+
+**Creative Discoveries**:
+- [Character insights discovered]
+- [Plot developments that emerged]
+- [Creative solutions found]
+
+**Creative Challenges**:
+- [Writing blocks encountered]: [How addressed]
+- [Character/plot problems]: [Solutions attempted]
+
+**Next Session Plan**:
+- [Specific scenes to write]
+- [Character/plot issues to resolve]
+
+## 🚫 Creative Mistakes Archive
+**Purpose**: Prevent repeating creative mistakes
+
+### [Mistake Category]
+- **Issue**: [What didn't work creatively]
+- **Why It Failed**: [Reason it didn't work]
+- **Better Approach**: [Improved creative solution]
+- **Prevention**: [How to avoid in future]
+```
+
+**Instructions for Creative Work**:
+- **Start of each session**: Review analysis and previous session notes
+- **Before major plot decisions**: Check analysis for character consistency
+- **After creative breakthroughs**: Document insights in both files
+- **When stuck**: Review work log for patterns and solutions
+
 ## 📝 Story Overview
 
 **Theme**: {{{{ theme | default("To be determined") }}}}
@@ -60,44 +145,51 @@ class StoryWritingTemplate(Template):
 ## 🚀 Writing Process
 
 ### Phase 1: Brainstorming & Planning (1-2 days)
+- [ ] **Create Analysis Document**: Set up creative_analysis.md with vision and strategy
+- [ ] **Create Work Log**: Set up creative_work_log.md for session tracking
 - [ ] **Develop Core Concept**
-  Define the central idea and conflict
-  
+  Define the central idea and conflict (document in analysis)
 - [ ] **Character Development**
-  Create detailed character profiles
-  
+  Create detailed character profiles (update analysis with insights)
 - [ ] **World Building**
-  Establish setting and rules
+  Establish setting and rules (document research needs)
 
 ### Phase 2: Story Structure (1-2 days)
+- [ ] **Update Analysis**: Refine understanding based on planning
 - [ ] **Create Story Outline**
-  Plan beginning, middle, and end
-  
+  Plan beginning, middle, and end (reference analysis for consistency)
 - [ ] **Plot Points Planning**
   Identify key scenes and turning points
-  
 - [ ] **Conflict Resolution**
   Plan how conflicts will be resolved
 
 ### Phase 3: Writing ({{{{ estimated_duration | default("1-2 weeks") }}}})
+- [ ] **Daily Work Log Updates**: Track progress and discoveries
 - [ ] **First Draft**
-  Write without editing, focus on story
-  
+  Write without editing, focus on story (log insights)
 - [ ] **Character Dialogue**
-  Develop authentic character voices
-  
+  Develop authentic character voices (note voice discoveries)
 - [ ] **Scene Development**
-  Write detailed, engaging scenes
+  Write detailed, engaging scenes (document creative solutions)
 
 ### Phase 4: Revision & Editing (3-5 days)
+- [ ] **Review Analysis & Work Log**: Check for consistency and missed opportunities
 - [ ] **Content Revision**
-  Review plot, character development, pacing
-  
+  Review plot, character development, pacing (update analysis)
 - [ ] **Line Editing**
   Improve sentence structure and flow
-  
 - [ ] **Final Proofread**
   Check grammar, spelling, formatting
+
+## 🔄 Creative Progress Tracking
+**Instructions**: Update daily with creative discoveries and progress
+
+### {{{{ current_date | default("2025-12-15") }}}}
+- **Creative Analysis**: [Creative Analysis](./creative_analysis.md) - [Document current creative understanding]
+- **Work Log**: [Creative Work Log](./creative_work_log.md) - [Session summary and creative discoveries]
+- **Words Written**: [Number] / {self.estimated_word_count} target
+- **Creative Breakthroughs**: [Any character or plot insights]
+- **Next Session**: [Specific creative goals for next session]
 
 ## 📊 Success Criteria
 - [ ] Story reaches target word count ({self.estimated_word_count} words)
@@ -105,6 +197,7 @@ class StoryWritingTemplate(Template):
 - [ ] Plot is engaging with clear resolution
 - [ ] Writing style is consistent throughout
 - [ ] Grammar and spelling are error-free
+- [ ] Creative analysis documents show clear vision achievement
 
 ## 📚 Resources
 - Writing craft books
@@ -116,7 +209,8 @@ class StoryWritingTemplate(Template):
 - Set daily writing goals
 - Don't edit while writing first draft
 - Read your dialogue aloud
-- Get feedback from beta readers"""
+- Get feedback from beta readers
+- Always update your creative analysis and work log"""
 
 
 @dataclass

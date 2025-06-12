@@ -141,6 +141,7 @@ class PlannerAgent:
                 'tech_requirements': self._extract_tech_requirements(task_description),
                 'target_users': self._extract_target_users(task_description),
                 'deployment_target': self._extract_deployment_target(task_description),
+                'project_type': self._extract_project_type(task_description),
             })
         
         # Add creative-specific context
@@ -308,6 +309,36 @@ class PlannerAgent:
         
         return 'To be determined'
     
+    def _extract_project_type(self, task_description: str) -> str:
+        """Extract proper project type for consistent technology stack selection."""
+        desc_lower = task_description.lower()
+        
+        # Mobile Applications - check first to avoid conflicts
+        if any(keyword in desc_lower for keyword in ['mobile app', 'mobile application', 'ios app', 'android app', 'mobile e-commerce', 'mobile ecommerce']):
+            return 'mobile_application'
+        
+        # Website/Web Applications
+        elif any(keyword in desc_lower for keyword in ['website', 'web app', 'web application']):
+            if 'portfolio' in desc_lower:
+                return 'portfolio_website'
+            elif 'e-commerce' in desc_lower or 'ecommerce' in desc_lower:
+                return 'ecommerce_website'
+            elif 'blog' in desc_lower:
+                return 'blog_website'
+            else:
+                return 'web_application'
+        
+        # API Services
+        elif any(keyword in desc_lower for keyword in ['api', 'backend', 'service', 'microservice']):
+            return 'api_service'
+        
+        # Desktop Applications
+        elif any(keyword in desc_lower for keyword in ['desktop app', 'desktop application']):
+            return 'desktop_application'
+        
+        # Default to web application
+        return 'web_application'
+    
     def _enhance_plan_with_llm(self, plan_content: str, task_description: str, task_analysis) -> str:
         """Enhance the generated plan using LLM review and improvement."""
         
@@ -393,63 +424,433 @@ Enhanced Plan:"""
         return enhanced_plan
     
     def _add_technical_specifics(self, plan: str, task_description: str) -> str:
-        """Add specific technical recommendations."""
+        """Add specific technical recommendations with LLM-optimized content."""
         desc_lower = task_description.lower()
+        project_type = self._extract_project_type(task_description)
         
-        # Add specific tech stack recommendations
-        tech_recommendations = []
+        # Get technology stack based on project type (no conflicts)
+        tech_stack = self._get_consistent_tech_stack(project_type, desc_lower)
         
-        if 'website' in desc_lower or 'web' in desc_lower:
-            if 'portfolio' in desc_lower:
-                tech_recommendations.extend([
-                    "**Frontend**: Next.js 14 with TypeScript for optimal SEO and performance",
-                    "**Styling**: Tailwind CSS for responsive design and fast development", 
-                    "**Image Optimization**: Next.js Image component with Cloudinary integration",
-                    "**Hosting**: Vercel for seamless deployment and edge optimization"
-                ])
-            elif 'e-commerce' in desc_lower:
-                tech_recommendations.extend([
-                    "**Framework**: Next.js 14 with App Router for modern e-commerce architecture",
-                    "**Database**: PostgreSQL with Prisma ORM for robust data management",
-                    "**Payment**: Stripe integration with webhook handling",
-                    "**State Management**: Zustand for cart and user state management",
-                    "**Authentication**: NextAuth.js with multiple providers",
-                    "**Hosting**: Vercel with Supabase for database hosting"
-                ])
-            else:
-                tech_recommendations.extend([
-                    "**Frontend**: React 18 with TypeScript for type safety",
-                    "**Backend**: Node.js with Express.js or Fastify",
-                    "**Database**: PostgreSQL for relational data or MongoDB for flexible schemas",
-                    "**Authentication**: JWT with refresh tokens"
-                ])
+        # Add LLM-specific sections
+        llm_sections = self._generate_llm_sections(project_type, tech_stack, desc_lower)
         
-        if 'mobile' in desc_lower:
-            tech_recommendations.extend([
-                "**Framework**: React Native with Expo for cross-platform development",
-                "**Navigation**: React Navigation v6 for smooth navigation",
-                "**State Management**: Redux Toolkit with RTK Query for API calls",
-                "**Push Notifications**: Expo Notifications with Firebase backend"
-            ])
-        
-        # Insert tech recommendations
-        if tech_recommendations:
-            tech_section = f"""
-
-## 🔧 **Recommended Technology Stack**
-
-{chr(10).join(tech_recommendations)}
-
-## 🏗️ **Architecture Considerations**
-- **Security**: Implement HTTPS, input validation, and secure authentication
-- **Performance**: Use CDN for static assets, implement caching strategies
-- **Scalability**: Design with horizontal scaling in mind, use microservices if needed
-- **Monitoring**: Implement logging, error tracking (Sentry), and performance monitoring
-"""
-            # Insert after Technology Stack section
-            plan = plan.replace("## 📊 Project Tracker", tech_section + "\n## 📊 Project Tracker")
+        # Insert LLM sections before Project Tracker
+        plan = plan.replace("## 📊 Project Tracker", llm_sections + "\n## 📊 Project Tracker")
         
         return plan
+    
+    def _get_consistent_tech_stack(self, project_type: str, desc_lower: str) -> dict:
+        """Get consistent, non-conflicting technology stack based on project type."""
+        
+        if project_type == 'portfolio_website':
+            return {
+                'frontend': ['Next.js 14', 'TypeScript', 'Tailwind CSS'],
+                'backend': ['Next.js API Routes', 'Prisma ORM'],
+                'database': ['PostgreSQL', 'Supabase'],
+                'media': ['Cloudinary', 'Next.js Image'],
+                'deployment': ['Vercel'],
+                'cms': ['Sanity CMS (optional)', 'Contentful (optional)']
+            }
+        
+        elif project_type == 'ecommerce_website':
+            return {
+                'frontend': ['Next.js 14', 'TypeScript', 'Tailwind CSS'],
+                'backend': ['Next.js API Routes', 'Prisma ORM'],
+                'database': ['PostgreSQL', 'Redis (caching)'],
+                'payment': ['Stripe', 'PayPal SDK'],
+                'state': ['Zustand', 'React Query'],
+                'auth': ['NextAuth.js'],
+                'deployment': ['Vercel', 'Supabase']
+            }
+        
+        elif project_type == 'mobile_application':
+            return {
+                'framework': ['React Native', 'Expo'],
+                'language': ['TypeScript'],
+                'navigation': ['React Navigation v6'],
+                'state': ['Redux Toolkit', 'RTK Query'],
+                'backend': ['Firebase', 'Supabase'],
+                'auth': ['Firebase Auth', 'Expo AuthSession'],
+                'push': ['Expo Notifications'],
+                'deployment': ['Expo EAS', 'App Store Connect', 'Google Play Console']
+            }
+        
+        elif project_type == 'api_service':
+            return {
+                'framework': ['FastAPI', 'Python 3.11+'],
+                'database': ['PostgreSQL', 'SQLAlchemy'],
+                'auth': ['JWT', 'OAuth2'],
+                'validation': ['Pydantic'],
+                'testing': ['pytest', 'pytest-asyncio'],
+                'docs': ['OpenAPI/Swagger'],
+                'deployment': ['Docker', 'Railway', 'AWS Lambda']
+            }
+        
+        else:  # web_application default
+            return {
+                'frontend': ['React 18', 'TypeScript', 'Tailwind CSS'],
+                'backend': ['Node.js', 'Express.js', 'Prisma ORM'],
+                'database': ['PostgreSQL'],
+                'auth': ['JWT', 'bcrypt'],
+                'testing': ['Jest', 'React Testing Library'],
+                'deployment': ['Docker', 'Nginx', 'DigitalOcean']
+            }
+    
+    def _generate_llm_sections(self, project_type: str, tech_stack: dict, desc_lower: str) -> str:
+        """Generate LLM-optimized sections for direct AI agent consumption."""
+        
+        # Format technology stack
+        tech_sections = []
+        for category, technologies in tech_stack.items():
+            tech_list = ', '.join(technologies)
+            tech_sections.append(f"- **{category.title()}**: {tech_list}")
+        
+        tech_stack_formatted = '\n'.join(tech_sections)
+        
+        # Generate file structure
+        file_structure = self._generate_file_structure(project_type)
+        
+        # Generate coding standards
+        coding_standards = self._generate_coding_standards(project_type)
+        
+        # Generate implementation guidance
+        implementation_guidance = self._generate_implementation_guidance(project_type, desc_lower)
+        
+        # Generate LLM memory management instructions
+        memory_management = self._generate_memory_management_instructions(project_type)
+        
+        return f"""
+
+## 🤖 **LLM Implementation Context**
+
+**Instructions for AI Agents**: This section provides specific guidance for code generation and implementation. Use this context to generate accurate, project-specific solutions.
+
+{memory_management}
+
+### 🔧 **Technology Stack (Consistent & Final)**
+
+{tech_stack_formatted}
+
+### 📁 **Project File Structure**
+
+```
+{file_structure}
+```
+
+{coding_standards}
+
+{implementation_guidance}
+
+## 🏗️ **Architecture Decisions & Rationale**
+
+### **Technology Choice Justification**
+- **Primary Framework**: {list(tech_stack.values())[0][0]} chosen for {self._get_framework_justification(project_type)}
+- **Database**: {tech_stack.get('database', ['PostgreSQL'])[0]} for {self._get_database_justification(project_type)}
+- **Styling**: {tech_stack.get('frontend', tech_stack.get('framework', ['']))[0] if 'CSS' in str(tech_stack) else 'Component-based styling'} for consistent design system
+
+### **Architecture Pattern**
+- **Pattern**: {self._get_architecture_pattern(project_type)}
+- **Data Flow**: {self._get_data_flow_pattern(project_type)}
+- **Security**: {self._get_security_pattern(project_type)}"""
+    
+    def _generate_file_structure(self, project_type: str) -> str:
+        """Generate project-specific file structure for LLMs."""
+        
+        if project_type == 'portfolio_website':
+            return """project-root/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── gallery/
+│   │   │   └── page.tsx
+│   │   └── contact/
+│   │       └── page.tsx
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── Gallery.tsx
+│   │   ├── ContactForm.tsx
+│   │   └── Navigation.tsx
+│   ├── lib/
+│   │   ├── utils.ts
+│   │   └── cloudinary.ts
+│   └── styles/
+│       └── globals.css
+├── public/
+│   └── images/
+├── package.json
+├── tailwind.config.js
+├── next.config.js
+└── tsconfig.json"""
+        
+        elif project_type == 'mobile_application':
+            return """project-root/
+├── src/
+│   ├── screens/
+│   │   ├── HomeScreen.tsx
+│   │   ├── ProfileScreen.tsx
+│   │   └── SettingsScreen.tsx
+│   ├── components/
+│   │   ├── common/
+│   │   └── forms/
+│   ├── navigation/
+│   │   └── AppNavigator.tsx
+│   ├── store/
+│   │   ├── index.ts
+│   │   └── slices/
+│   ├── services/
+│   │   └── api.ts
+│   └── utils/
+│       └── helpers.ts
+├── assets/
+├── App.tsx
+├── app.json
+└── package.json"""
+        
+        elif project_type == 'api_service':
+            return """project-root/
+├── app/
+│   ├── main.py
+│   ├── models/
+│   │   └── __init__.py
+│   ├── routers/
+│   │   ├── __init__.py
+│   │   └── api_v1/
+│   ├── core/
+│   │   ├── config.py
+│   │   ├── security.py
+│   │   └── database.py
+│   └── utils/
+│       └── helpers.py
+├── tests/
+├── requirements.txt
+├── Dockerfile
+└── docker-compose.yml"""
+        
+        else:  # web_application default
+            return """project-root/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── hooks/
+│   ├── utils/
+│   └── styles/
+├── server/
+│   ├── routes/
+│   ├── models/
+│   ├── middleware/
+│   └── config/
+├── public/
+├── package.json
+└── README.md"""
+    
+    def _generate_coding_standards(self, project_type: str) -> str:
+        """Generate coding standards for consistent LLM output."""
+        
+        if 'mobile' in project_type:
+            return """
+### 📝 **Coding Standards for LLM**
+
+**Naming Conventions**:
+- Components: PascalCase (e.g., `UserProfile.tsx`)
+- Functions: camelCase (e.g., `handleUserLogin`)
+- Constants: UPPER_SNAKE_CASE (e.g., `API_BASE_URL`)
+- Files: PascalCase for components, camelCase for utilities
+
+**Component Structure**:
+```typescript
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+interface Props {
+  title: string;
+  onPress: () => void;
+}
+
+export const ComponentName: React.FC<Props> = ({ title, onPress }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
+```"""
+        
+        elif 'api' in project_type:
+            return """
+### 📝 **Coding Standards for LLM**
+
+**FastAPI Structure**:
+```python
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from ..database import get_db
+from ..models import ModelName
+from ..schemas import SchemaName
+
+router = APIRouter(prefix="/api/v1", tags=["resource"])
+
+@router.get("/endpoint")
+async def get_resource(db: Session = Depends(get_db)):
+    try:
+        # Implementation
+        return {"data": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+**File Naming**: snake_case for Python files
+**Class Naming**: PascalCase for models and schemas
+**Function Naming**: snake_case for functions"""
+        
+        else:  # web applications
+            return """
+### 📝 **Coding Standards for LLM**
+
+**React/TypeScript Structure**:
+```typescript
+interface Props {
+  title: string;
+  className?: string;
+}
+
+export const ComponentName: React.FC<Props> = ({ title, className }) => {
+  const [state, setState] = useState<string>('');
+  
+  const handleAction = useCallback(() => {
+    // Implementation
+  }, []);
+
+  return (
+    <div className={cn('base-styles', className)}>
+      <h1>{title}</h1>
+    </div>
+  );
+};
+```
+
+**Styling**: Use Tailwind CSS classes, avoid inline styles
+**State Management**: Prefer useState and useReducer for local state
+**API Calls**: Use custom hooks or React Query"""
+    
+    def _generate_implementation_guidance(self, project_type: str, desc_lower: str) -> str:
+        """Generate specific implementation guidance for LLMs."""
+        
+        guidance = f"""
+### 🎯 **Implementation Priority & LLM Instructions**
+
+**Phase 1 - Foundation (Week 1)**:
+1. Set up project structure exactly as shown above
+2. Configure development environment and dependencies
+3. Implement core routing/navigation structure
+4. Create basic component library with TypeScript interfaces
+
+**Phase 2 - Core Features (Weeks 2-4)**:"""
+        
+        if 'portfolio' in desc_lower:
+            guidance += """
+- Implement image gallery with Cloudinary integration
+- Create contact form with email functionality
+- Add responsive navigation and layout components
+- Implement image optimization and lazy loading"""
+        
+        elif 'ecommerce' in desc_lower or 'e-commerce' in desc_lower:
+            guidance += """
+- Implement product catalog with search and filtering
+- Create shopping cart functionality with state management
+- Integrate Stripe payment processing
+- Add user authentication and profile management"""
+        
+        elif 'mobile' in project_type:
+            guidance += """
+- Implement navigation stack with React Navigation
+- Create reusable UI components following design system
+- Add async storage for offline functionality
+- Implement push notifications and deep linking"""
+        
+        else:
+            guidance += """
+- Implement core application features and user flows
+- Create API endpoints and database models
+- Add authentication and authorization
+- Implement real-time updates if needed"""
+        
+        guidance += f"""
+
+**LLM Code Generation Guidelines**:
+- Always include TypeScript interfaces and proper typing
+- Add error handling and loading states for all async operations
+- Include unit tests for core functionality
+- Follow the established file structure and naming conventions
+- Use consistent import ordering and dependency management
+- Add JSDoc comments for complex functions
+
+**Testing Strategy**:
+- Write unit tests for utilities and hooks
+- Add integration tests for API endpoints
+- Include E2E tests for critical user flows
+- Maintain >80% code coverage"""
+        
+        return guidance
+    
+    def _get_framework_justification(self, project_type: str) -> str:
+        """Get framework justification for architecture decisions."""
+        justifications = {
+            'portfolio_website': 'SEO optimization, static generation, and image optimization',
+            'ecommerce_website': 'SSR capabilities, performance, and built-in API routes',
+            'mobile_application': 'cross-platform development and native performance',
+            'api_service': 'high performance, automatic documentation, and modern Python features',
+            'web_application': 'component reusability, ecosystem, and development speed'
+        }
+        return justifications.get(project_type, 'versatility and community support')
+    
+    def _get_database_justification(self, project_type: str) -> str:
+        """Get database choice justification."""
+        if 'mobile' in project_type:
+            return 'cloud-first architecture and real-time synchronization'
+        return 'ACID compliance, scalability, and robust ecosystem'
+    
+    def _get_architecture_pattern(self, project_type: str) -> str:
+        """Get architecture pattern for project type."""
+        patterns = {
+            'portfolio_website': 'JAMstack (JavaScript, APIs, Markup)',
+            'ecommerce_website': 'Full-stack SSR with API integration',
+            'mobile_application': 'Redux Pattern with middleware',
+            'api_service': 'Layered Architecture (Router → Service → Repository)',
+            'web_application': 'Component-based with custom hooks'
+        }
+        return patterns.get(project_type, 'Component-based architecture')
+    
+    def _get_data_flow_pattern(self, project_type: str) -> str:
+        """Get data flow pattern description."""
+        if 'mobile' in project_type:
+            return 'Redux store → Components → API calls → State updates'
+        elif 'api' in project_type:
+            return 'Request → Router → Service Layer → Database → Response'
+        else:
+            return 'Component state → API calls → State updates → Re-render'
+    
+    def _get_security_pattern(self, project_type: str) -> str:
+        """Get security pattern for project type."""
+        patterns = {
+            'portfolio_website': 'HTTPS, CSP headers, form validation',
+            'ecommerce_website': 'JWT auth, payment tokenization, OWASP compliance',
+            'mobile_application': 'Token-based auth, secure storage, certificate pinning',
+            'api_service': 'JWT/OAuth2, input validation, rate limiting, CORS',
+            'web_application': 'Authentication, authorization, input sanitization'
+        }
+        return patterns.get(project_type, 'Authentication and input validation')
     
     def _add_creative_specifics(self, plan: str, task_description: str) -> str:
         """Add specific creative project recommendations."""
@@ -542,6 +943,193 @@ Enhanced Plan:"""
             plan = plan.replace("## 💡 Technical Considerations", quality_section + "\n## 💡 Technical Considerations")
         
         return plan
+    
+    def _generate_memory_management_instructions(self, project_type: str) -> str:
+        """Generate instructions for LLM memory management with analysis documents and work logs."""
+        
+        return f"""
+### 📋 **LLM Memory Management Instructions**
+
+**CRITICAL**: Before starting any work, create and maintain these documents for persistent memory:
+
+#### **🗂️ Project Scaffolding Setup**
+**First Step**: Create a scaffolding folder structure for project organization:
+
+```bash
+mkdir -p .project-scaffolding
+echo ".project-scaffolding/" >> .gitignore
+```
+
+**Scaffolding Structure**:
+```
+.project-scaffolding/
+├── project_analysis.md      # Main project analysis document
+├── work_log.md             # Daily work log and session tracking
+├── implementation_tracker.md # Progress tracking and milestones
+├── architecture_decisions.md # Technical and design decisions log
+├── testing_strategy.md     # Testing approach and results
+├── deployment_notes.md     # Deployment and environment notes
+└── lessons_learned.md      # Retrospective and improvement notes
+```
+
+**Benefits of Scaffolding Folder**:
+- ✅ **Git-ignored**: Won't clutter your repository
+- ✅ **Organized**: All project memory in one place
+- ✅ **Persistent**: Survives project restructuring
+- ✅ **Searchable**: Easy to find information across documents
+- ✅ **Collaborative**: Team can share scaffolding if needed
+
+#### **1. 📊 Analysis Document (`.project-scaffolding/project_analysis.md`)**
+Create a comprehensive analysis document and link it here: `[Project Analysis](./.project-scaffolding/project_analysis.md)`
+
+**Document Structure**:
+```markdown
+# Project Analysis - {{{{ project_name }}}}
+
+## 🎯 Project Understanding
+- **Core Objective**: [Your understanding of the main goal]
+- **Key Features Analysis**: [Detailed breakdown of each feature]
+- **Technical Complexity**: [Assessment of technical challenges]
+- **User Journey**: [How users will interact with the system]
+
+## 🔍 Requirements Analysis
+- **Functional Requirements**: [What the system must do]
+- **Non-Functional Requirements**: [Performance, security, scalability]
+- **Dependencies**: [External services, APIs, libraries needed]
+- **Constraints**: [Technical, time, resource limitations]
+
+## 🏗️ Architecture Analysis
+- **System Architecture**: [High-level system design]
+- **Data Flow**: [How data moves through the system]
+- **Integration Points**: [External service connections]
+- **Scalability Considerations**: [Future growth planning]
+
+## 📝 Implementation Strategy
+- **Development Approach**: [Methodology and best practices]
+- **Risk Assessment**: [Potential issues and mitigation]
+- **Testing Strategy**: [Comprehensive testing approach]
+- **Deployment Plan**: [Production deployment strategy]
+
+## 🔄 Ongoing Analysis Updates
+[Keep updating this section as you learn more about the project]
+```
+
+**Usage Instructions for LLM**:
+- **Before any major decision**: Update the analysis document
+- **When encountering issues**: Refer to analysis for context
+- **After completing phases**: Update with lessons learned
+- **Daily**: Review and refine your understanding
+
+#### **2. 📝 Work Log (`.project-scaffolding/work_log.md`)**
+Create a detailed work log and link it here: `[Work Log](./.project-scaffolding/work_log.md)`
+
+**Work Log Structure**:
+```markdown
+# Work Log - {{{{ project_name }}}}
+
+## 📊 Quick Reference
+- **Project Start**: [Date]
+- **Current Phase**: [Phase name and number]
+- **Last Major Milestone**: [What was completed last]
+- **Next Priority**: [What needs to be done next]
+- **Known Issues**: [Current blockers or problems]
+
+## 📅 Daily Log Entries
+
+### [Date] - [Session Description]
+**Time Spent**: [Duration]
+**Phase**: [Current phase]
+**Tasks Completed**:
+- [Specific task 1 with details]
+- [Specific task 2 with details]
+
+**Code Generated**:
+- [File created/modified]: [Brief description of changes]
+- [Component implemented]: [Functionality added]
+
+**Issues Encountered**:
+- [Problem description]: [How it was solved or current status]
+- [Technical challenge]: [Research done, solutions attempted]
+
+**Lessons Learned**:
+- [What worked well]
+- [What didn't work and why]
+- [Better approaches discovered]
+
+**Next Session Plan**:
+- [Priority task 1]
+- [Priority task 2]
+
+### [Previous entries...]
+
+## 🚫 Mistakes & Solutions Archive
+**Purpose**: Prevent repeating past mistakes
+
+### [Mistake Category]
+- **Issue**: [What went wrong]
+- **Cause**: [Why it happened]
+- **Solution**: [How it was fixed]
+- **Prevention**: [How to avoid in future]
+```
+
+**Work Log Usage Instructions for LLM**:
+- **Start of each session**: Review last entry and next session plan
+- **Before making changes**: Check if similar was attempted before
+- **After encountering issues**: Document the problem and solution
+- **End of each session**: Update with completed work and next priorities
+- **Weekly**: Review patterns and update prevention strategies
+
+#### **3. 🔗 Integration with Project Tracker**
+**Link Documents in Tracker**: Always reference your scaffolding documents in tracker updates:
+
+```markdown
+## 🔄 Daily Progress Updates
+### [Date]
+- **Analysis Document**: [Project Analysis](./.project-scaffolding/project_analysis.md) - Updated with [specific updates]
+- **Work Log**: [Work Log](./.project-scaffolding/work_log.md) - [Session summary]
+- **Completed**: [What was finished]
+- **In Progress**: [Current work with reference to analysis]
+- **Blockers**: [Issues with links to work log entries]
+- **Next Steps**: [Priorities based on analysis]
+```
+
+#### **4. 🧠 LLM Session Workflow**
+**Every session MUST follow this workflow**:
+
+1. **📖 Read Previous Context**
+   - Review project analysis document
+   - Check latest work log entries
+   - Understand current tracker status
+
+2. **🎯 Plan Current Session**
+   - Define specific goals based on analysis
+   - Check work log for any previous attempts
+   - Avoid repeating documented mistakes
+
+3. **💻 Execute with Documentation**
+   - Implement planned features
+   - Document all decisions in analysis
+   - Log all activities in work log
+
+4. **📝 Update Memory**
+   - Update analysis with new insights
+   - Add work log entry with details
+   - Update project tracker with references
+
+5. **🔄 Prepare for Next Session**
+   - Document next priorities in work log
+   - Update analysis with current understanding
+   - Leave clear notes for future sessions
+
+#### **5. 📁 Additional Scaffolding Documents**
+**Optional but recommended documents for comprehensive project memory**:
+
+- **Architecture Decisions**: `.project-scaffolding/architecture_decisions.md` - Record major technical decisions and rationale
+- **Testing Strategy**: `.project-scaffolding/testing_strategy.md` - Document testing approach and results
+- **Deployment Notes**: `.project-scaffolding/deployment_notes.md` - Environment setup and deployment procedures
+- **Lessons Learned**: `.project-scaffolding/lessons_learned.md` - Project retrospective and improvement opportunities
+
+**REMEMBER**: Your memory is persistent through these scaffolding documents. Always read, update, and reference them to maintain continuity and avoid repeating work or mistakes."""
 
 
 def parse_category(category_str: str) -> TaskCategory:
