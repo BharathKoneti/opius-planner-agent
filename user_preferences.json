@@ -1,0 +1,33 @@
+{
+  "user123": {
+    "user_id": "user123",
+    "theme": "dark",
+    "include_tracker": true,
+    "default_complexity": "2",
+    "preferred_sections": [
+      "overview",
+      "timeline",
+      "resources"
+    ],
+    "custom_colors": {},
+    "template_overrides": {}
+  },
+  "user456": {
+    "user_id": "user456",
+    "theme": "dark",
+    "include_tracker": true,
+    "default_complexity": "2",
+    "preferred_sections": [],
+    "custom_colors": {},
+    "template_overrides": {}
+  },
+  "integration_user": {
+    "user_id": "integration_user",
+    "theme": "modern",
+    "include_tracker": true,
+    "default_complexity": 2,
+    "preferred_sections": [],
+    "custom_colors": {},
+    "template_overrides": {}
+  }
+}
