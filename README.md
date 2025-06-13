@@ -9,7 +9,7 @@ A revolutionary planning agent by **Opius AI** that can generate structured, act
 **If you are an LLM agent, follow these instructions to use this repository effectively:**
 
 ### 🎯 **Step 1: Repository Setup & Usage**
-1. **Clone and use this repository**: `https://github.com/bharathkoneti/opius_planner_agent_alpha`
+1. **Clone and use this repository**: `https://github.com/BharathKoneti/opius-planner-agent`
 2. **Installation**: Run `pip install -e .` in the repository root
 3. **Generate a plan**: Use `opius-planner generate-plan "[your task description]" --verbose --enhance`
 4. **Review the generated plan**: Follow Step 2 instructions below
@@ -215,8 +215,8 @@ Created by Opius AI - Building the future of intelligent automation and planning
 
 # Opius Planner Agent 🚀
 
-[![Tests](https://img.shields.io/badge/tests-131%20passing-brightgreen)](https://github.com/opius-planner/opius_planner_agent_alpha)
-[![Coverage](https://img.shields.io/badge/coverage-80%25-green)](https://github.com/opius-planner/opius_planner_agent_alpha)
+[![Tests](https://img.shields.io/badge/tests-131%20passing-brightgreen)](https://github.com/BharathKoneti/opius-planner-agent)
+[![Coverage](https://img.shields.io/badge/coverage-80%25-green)](https://github.com/BharathKoneti/opius-planner-agent)
 [![Python](https://img.shields.io/badge/python-3.12+-blue)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -237,8 +237,8 @@ Created by Opius AI - Building the future of intelligent automation and planning
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/opius_planner_agent_alpha.git
-cd opius_planner_agent_alpha
+git clone https://github.com/BharathKoneti/opius-planner-agent.git
+cd opius-planner-agent
 
 # Create virtual environment
 python -m venv venv
@@ -509,7 +509,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 📧 Email: support@opiusai.com
 - 💬 Discord: [Join our community](https://discord.gg/opius-planner)
 - 📖 Documentation: [Full docs](https://docs.opiusai.com)
-- 🐛 Issues: [GitHub Issues](https://github.com/your-username/opius_planner_agent_alpha/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/BharathKoneti/opius-planner-agent/issues)
 
 ---
 
