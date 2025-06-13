@@ -187,10 +187,13 @@ pytest --cov=src/opius_planner --cov-report=html
 
 ## 📚 Documentation
 
-Detailed documentation is available in the `.scaffolding/` directory:
+Detailed documentation is available in the `docs/` directory:
 
-- [Implementation Plan](.scaffolding/IMPLEMENTATION_PLAN.md)
-- [Implementation Tracker](.scaffolding/IMPLEMENTATION_TRACKER.md)
+- [Architecture & Technical Design](docs/ARCHITECTURE.md)
+- [Universal Use Cases & Examples](docs/USE_CASES.md)
+- [Distribution & Deployment](docs/DISTRIBUTION_DEPLOYMENT.md)
+- [Marketplace Credentials Guide](docs/MARKETPLACE_CREDENTIALS.md)
+- [Documentation Strategy](docs/DOCUMENTATION_STRATEGY.md)
 
 ## 🤝 Contributing
 

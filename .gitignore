@@ -193,6 +193,11 @@ tmp/
 
 # Local test files and generated plans
 localtest/
+
+# Allow documentation in docs/ folder
 *.md
 !README.md
-!.scaffolding/**/*.md
+!docs/**/*.md
+
+# Development scaffolding (development tracking only)
+.scaffolding/
