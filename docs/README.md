@@ -6,11 +6,8 @@ Welcome to the comprehensive documentation for the **Opius Planner Agent** - the
 
 | 📄 **Document** | 🎯 **Purpose** | 👥 **Audience** |
 |-----------------|----------------|------------------|
-| **[🏗️ Architecture & Technical Design](ARCHITECTURE.md)** | Core system design, environment awareness, implementation details | Developers, Contributors |
+| **[🏗️ Architecture & Technical Design](ARCHITECTURE.md)** | System design, environment awareness, contributing guide | Developers, Contributors |
 | **[📋 Universal Use Cases & Examples](USE_CASES.md)** | Comprehensive planning examples across all domains | Users, Product Managers |
-| **[🚀 Distribution & Deployment](DISTRIBUTION_DEPLOYMENT.md)** | Multi-platform publishing strategy with automation | DevOps, Release Managers |
-| **[🔐 Marketplace Credentials Guide](MARKETPLACE_CREDENTIALS.md)** | Complete setup guide for all publishing platforms | Administrators, DevOps |
-| **[📚 Documentation Strategy](DOCUMENTATION_STRATEGY.md)** | Visual, user-friendly documentation approach | Technical Writers, Contributors |
 
 ## 🚀 **Quick Navigation**
 
@@ -21,13 +18,8 @@ Welcome to the comprehensive documentation for the **Opius Planner Agent** - the
 
 ### **For Developers**
 - **System Architecture**: Start with [ARCHITECTURE.md](ARCHITECTURE.md) for technical implementation
-- **Contributing**: See main [README](../README.md) for contribution guidelines
-- **Distribution Setup**: Follow [DISTRIBUTION_DEPLOYMENT.md](DISTRIBUTION_DEPLOYMENT.md) for publishing
-
-### **For Project Maintainers**
-- **Release Process**: Use [DISTRIBUTION_DEPLOYMENT.md](DISTRIBUTION_DEPLOYMENT.md) for multi-platform releases
-- **Credentials Management**: Follow [MARKETPLACE_CREDENTIALS.md](MARKETPLACE_CREDENTIALS.md) for secure setup
-- **Documentation Guidelines**: See [DOCUMENTATION_STRATEGY.md](DOCUMENTATION_STRATEGY.md) for standards
+- **Contributing**: See main [README](../README.md) for contribution guidelines and development setup
+- **Template System**: Learn how to create custom templates in [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ## 🎯 **Key Features Covered**
 

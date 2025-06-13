@@ -189,11 +189,8 @@ pytest --cov=src/opius_planner --cov-report=html
 
 Detailed documentation is available in the `docs/` directory:
 
-- [Architecture & Technical Design](docs/ARCHITECTURE.md)
-- [Universal Use Cases & Examples](docs/USE_CASES.md)
-- [Distribution & Deployment](docs/DISTRIBUTION_DEPLOYMENT.md)
-- [Marketplace Credentials Guide](docs/MARKETPLACE_CREDENTIALS.md)
-- [Documentation Strategy](docs/DOCUMENTATION_STRATEGY.md)
+- **[🏗️ Architecture & Technical Design](docs/ARCHITECTURE.md)** - System design and contributing guide
+- **[📋 Universal Use Cases & Examples](docs/USE_CASES.md)** - Comprehensive planning examples across all domains
 
 ## 🤝 Contributing
 
