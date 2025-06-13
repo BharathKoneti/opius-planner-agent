@@ -507,8 +507,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - 📧 Email: support@opiusai.com
-- 💬 Discord: [Join our community](https://discord.gg/opius-planner)
-- 📖 Documentation: [Full docs](https://docs.opiusai.com)
+- 📝 Blog: [Opius AI Blog](https://opiusai.com/blog/) - Insights on AI, autonomous agents, and enterprise solutions
 - 🐛 Issues: [GitHub Issues](https://github.com/BharathKoneti/opius-planner-agent/issues)
 
 ---
